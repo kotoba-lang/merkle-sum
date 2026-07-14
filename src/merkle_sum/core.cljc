@@ -23,8 +23,7 @@
   never duplicated, since duplication would double-count its sum.
 
   Extracted from `cryptoexchange.attest` (ADR-2607141200) so any actor
-  needing PoR/PoL reuses one audited implementation."
-  (:require [clojure.string :as str]))
+  needing PoR/PoL reuses one audited implementation.")
 
 ;; ------------------------------ hashing ------------------------------
 

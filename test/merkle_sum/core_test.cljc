@@ -71,6 +71,42 @@
     (testing "an unknown id has no proof"
       (is (nil? (ms/inclusion-proof t "mallory"))))))
 
+(def ^:private big-pairs
+  (mapv #(vector (str "acct" %) (inc %)) (range 37)))  ; distinct ids, amounts 1..37
+
+(deftest adversarial-proof-hardening
+  (let [t (tree-of big-pairs)
+        root (:root t)]
+    (testing "every leaf verifies in a 37-leaf tree (odd counts exercise
+              carry-up at several levels)"
+      (doseq [[label amount] big-pairs]
+        (is (true? (ms/verify sha256-hex (sha256-hex (str "leaf|" label "|" amount))
+                              amount (ms/inclusion-proof t label) root))
+            (str label " must verify"))))
+    (testing "tampering ANY position of a proof — hash, sum, or side — is
+              rejected (a verification bypass at some depth would be critical)"
+      (doseq [[label amount] (take 6 big-pairs)]
+        (let [lh (sha256-hex (str "leaf|" label "|" amount))
+              proof (vec (ms/inclusion-proof t label))]
+          (dotimes [i (count proof)]
+            (is (false? (ms/verify sha256-hex lh amount (assoc-in proof [i :hash] "00") root))
+                (str label " step " i " hash-tamper must reject"))
+            (is (false? (ms/verify sha256-hex lh amount (update-in proof [i :sum] inc) root))
+                (str label " step " i " sum+1 must reject"))
+            (is (false? (ms/verify sha256-hex lh amount
+                                   (update-in proof [i :side] {:left :right :right :left}) root))
+                (str label " step " i " side-flip must reject"))))))
+    (testing "one leaf's proof cannot verify a DIFFERENT leaf's claim"
+      (let [[l0 _] (first big-pairs)
+            [l1 a1] (second big-pairs)]
+        (is (false? (ms/verify sha256-hex (sha256-hex (str "leaf|" l1 "|" a1))
+                               a1 (ms/inclusion-proof t l0) root)))))
+    (testing "leaf ordering is input-independent (the tree sorts by :id), so the
+              root is identical under any permutation of the input"
+      (let [interleaved (vec (concat (take-nth 2 big-pairs) (take-nth 2 (rest big-pairs))))]
+        (is (= root (:root (tree-of (reverse big-pairs)))))
+        (is (= root (:root (tree-of interleaved))))))))
+
 (deftest empty-and-singleton-trees
   (testing "empty tree has a defined empty root"
     (let [t (ms/build-tree sha256-hex [])]
