@@ -31,12 +31,41 @@ Extracted from `cloud-itonami-isic-6611-cryptoexchange`'s
 `cryptoexchange.attest` (superproject ADR-2607141200) so any actor
 needing PoR/PoL reuses one audited implementation rather than a copy.
 
+## Quickstart
+
+The fastest check that this works, with no JVM, is the runnable
+walkthrough — publish, prove, verify, and the sum-shrinking attack it
+rejects. Its exit code is the verdict:
+
+```sh
+nbb --classpath src docs/proof-of-liabilities-walkthrough.cljs
+```
+
+See [`docs/operator-quickstart.md`](docs/operator-quickstart.md) for
+the four-step operator story and what you own versus what the library
+owns.
+
 ## Test
 
 ```sh
-clojure -M:test                                     # JVM compat gate
-clojure -Sdeps '{:paths ["src" "test"]}' -M:cljs \  # CLJS primary gate
-  -m cljs.main --target node -m merkle-sum.cljs-runner
+clojure -M:test            # JVM compat gate
+clojure -M:lint            # clj-kondo, errors fail
 ```
+
+The CLJS suite is the primary gate and takes **two steps** — the
+compiled bundle is the process whose exit code is real:
+
+```sh
+clojure -Sdeps '{:paths ["src" "test"]}' -M:cljs \
+  -m cljs.main --target node --output-dir target/node-out \
+  --output-to target/tests.cjs -c merkle-sum.cljs-runner
+echo '{"type":"commonjs"}' > target/node-out/package.json
+node target/tests.cjs
+```
+
+Do **not** gate on the one-step `-m merkle-sum.cljs-runner` form: it
+prints the failures but exits `0` regardless, so nothing reading the
+exit code can tell a passing run from a failing one (measured both
+ways — see the quickstart).
 
 AGPL-3.0-or-later.
