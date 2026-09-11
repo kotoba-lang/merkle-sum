@@ -17,7 +17,7 @@ quietly omitted.
 ## 1. Prove the library works — 3 seconds, no JVM
 
 ```sh
-nbb --classpath src docs/proof-of-liabilities-walkthrough.cljk
+kbb --backend sci --classpath src docs/proof-of-liabilities-walkthrough.cljk
 ```
 
 This is the fastest gate and the one to reach for first. It walks the
@@ -79,8 +79,8 @@ and prove nothing about the guard.
 Two runtimes, one portable `.cljc` suite.
 
 ```sh
-clojure -M:test            # JVM compat gate — Ran 6 tests, 193 assertions
-clojure -M:lint            # clj-kondo, errors fail — errors: 0, warnings: 0
+kbb -M:test            # JVM compat gate — Ran 6 tests, 193 assertions
+kbb -M:lint            # clj-kondo, errors fail — errors: 0, warnings: 0
 ```
 
 Both were checked in the failing direction as well: breaking
@@ -90,7 +90,7 @@ an unresolved symbol in `src/` makes `-M:lint` exit `3`.
 ClojureScript is the primary gate, and it takes **two steps**:
 
 ```sh
-clojure -Sdeps '{:paths ["src" "test"]}' -M:cljs \
+kbb -Sdeps '{:paths ["src" "test"]}' -M:cljs \
   -m cljs.main --target node --output-dir target/node-out \
   --output-to target/tests.cjs -c merkle-sum.cljs-runner
 echo '{"type":"commonjs"}' > target/node-out/package.json

@@ -38,7 +38,7 @@ walkthrough — publish, prove, verify, and the sum-shrinking attack it
 rejects. Its exit code is the verdict:
 
 ```sh
-nbb --classpath src docs/proof-of-liabilities-walkthrough.cljk
+kbb --backend sci --classpath src docs/proof-of-liabilities-walkthrough.cljk
 ```
 
 See [`docs/operator-quickstart.md`](docs/operator-quickstart.md) for
@@ -48,15 +48,15 @@ owns.
 ## Test
 
 ```sh
-clojure -M:test            # JVM compat gate
-clojure -M:lint            # clj-kondo, errors fail
+kbb -M:test            # JVM compat gate
+kbb -M:lint            # clj-kondo, errors fail
 ```
 
 The CLJS suite is the primary gate and takes **two steps** — the
 compiled bundle is the process whose exit code is real:
 
 ```sh
-clojure -Sdeps '{:paths ["src" "test"]}' -M:cljs \
+kbb -Sdeps '{:paths ["src" "test"]}' -M:cljs \
   -m cljs.main --target node --output-dir target/node-out \
   --output-to target/tests.cjs -c merkle-sum.cljs-runner
 echo '{"type":"commonjs"}' > target/node-out/package.json

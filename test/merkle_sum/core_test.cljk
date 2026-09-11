@@ -2,7 +2,7 @@
   "Spec for the generic Merkle-sum tree: root sum == total, inclusion
   proofs verify, sum-shrinking is rejected, odd nodes carry up, and the
   root is cross-runtime deterministic (pinned). Runs on JVM
-  (`clojure -M:test`) and — same portable `.cljc` — under ClojureScript
+  (`kbb -M:test`) and — same portable `.cljc` — under ClojureScript
   (`merkle-sum.cljs-runner`)."
   (:require [clojure.test :refer [deftest is testing]]
             [merkle-sum.core :as ms]))
