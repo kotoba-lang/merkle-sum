@@ -17,7 +17,7 @@ quietly omitted.
 ## 1. Prove the library works — 3 seconds, no JVM
 
 ```sh
-nbb --classpath src docs/proof-of-liabilities-walkthrough.cljs
+nbb --classpath src docs/proof-of-liabilities-walkthrough.cljk
 ```
 
 This is the fastest gate and the one to reach for first. It walks the
@@ -38,7 +38,7 @@ cross-runtime determinism lock, so a matching line here is also a
 third runtime (nbb) agreeing with the JVM and with Closure-compiled
 ClojureScript.
 
-Read `docs/proof-of-liabilities-walkthrough.cljs` next to this page —
+Read `docs/proof-of-liabilities-walkthrough.cljk` next to this page —
 it is ~90 lines and it *is* the integration guide. The four things it
 shows are the four things you have to get right:
 

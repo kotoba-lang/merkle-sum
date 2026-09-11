@@ -38,7 +38,7 @@ walkthrough — publish, prove, verify, and the sum-shrinking attack it
 rejects. Its exit code is the verdict:
 
 ```sh
-nbb --classpath src docs/proof-of-liabilities-walkthrough.cljs
+nbb --classpath src docs/proof-of-liabilities-walkthrough.cljk
 ```
 
 See [`docs/operator-quickstart.md`](docs/operator-quickstart.md) for
