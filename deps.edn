@@ -10,7 +10,7 @@
          :main-opts ["-m" "cognitect.test-runner"]
          :exec-fn cognitect.test-runner.api/test}
   ;; PRIMARY gate: the same portable suite under ClojureScript.
-  ;;   clojure -Sdeps '{:paths ["src" "test"]}' -M:cljs \
+  ;;   kbb -Sdeps '{:paths ["src" "test"]}' -M:cljs \
   ;;     -m cljs.main --target node -m merkle-sum.cljs-runner
   :cljs {:extra-deps {org.clojure/clojurescript {:mvn/version "1.11.132"}}}
   :lint {:replace-deps {clj-kondo/clj-kondo {:mvn/version "2024.11.14"}}

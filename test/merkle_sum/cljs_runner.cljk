@@ -1,7 +1,7 @@
 (ns merkle-sum.cljs-runner
   "Run the portable suite under a real ClojureScript host (cljs.main
   --target node) — the fleet runtime priority (cljs before JVM compat).
-    clojure -Sdeps '{:paths [\"src\" \"test\"]}' -M:cljs \\
+    kbb -Sdeps '{:paths [\"src\" \"test\"]}' -M:cljs \\
       -m cljs.main --target node --output-dir target/node-out \\
       --output-to target/tests.cjs -c merkle-sum.cljs-runner
     echo '{\"type\":\"commonjs\"}' > target/node-out/package.json
